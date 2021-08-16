@@ -2,15 +2,14 @@
 
 namespace furkankadioglu\eFatura;
 
-use Exception;
 use furkankadioglu\eFatura\Exceptions\ApiException;
 use furkankadioglu\eFatura\Exceptions\NullDataException;
 use furkankadioglu\eFatura\Exceptions\TestEnvironmentException;
 use furkankadioglu\eFatura\Models\Invoice;
 use furkankadioglu\eFatura\Models\UserInformations;
 use GuzzleHttp\Client;
-use Ramsey\Uuid\Uuid;
 use Mpdf\Mpdf;
+use Ramsey\Uuid\Uuid;
 
 class InvoiceManager
 {
@@ -18,97 +17,71 @@ class InvoiceManager
      * Api Urls
      */
     const BASE_URL = "https://earsivportal.efatura.gov.tr";
+
     const TEST_URL = "https://earsivportaltest.efatura.gov.tr";
 
     /**
      * Api Paths
      */
     const DISPATCH_PATH = "/earsiv-services/dispatch";
+
     const TOKEN_PATH = "/earsiv-services/assos-login";
+
     const REFERRER_PATH = "/intragiris.html";
 
-    /**
-     * Username field for auth
-     *
-     * @var string
-     */
-    protected $username;
+    protected string $username;
+
+    protected string $password;
 
     /**
-     * Password field for auth
-     *
-     * @var string
+     * Guzzle client
      */
-    protected $password;
-
-    /**
-     * Guzzle client variable
-     *
-     * @var GuzzleHttp\Client
-     */
-    protected $client;
+    protected Client $client;
 
     /**
      * Session Token
-     *
-     * @var string
      */
-    protected $token;
+    protected string $token;
 
     /**
      * Language
-     *
-     * @var string
      */
-    protected $language = "TR";
+    protected string $language = "TR";
 
     /**
      * Current targeted invoice
-     *
-     * @var furkankadioglu\eFatura\Models\Invoice
      */
-    protected $invoice;
+    protected Invoice $invoice;
 
     /**
      * Referrer variable
-     *
-     * @var string
      */
-    protected $referrer;
+    protected string $referrer;
 
     /**
      * Debug mode
-     *
-     * @var boolean
      */
-    protected $debugMode = false;
+    protected bool $debugMode = false;
 
     /**
      * Invoices
      *
-     * @var array furkankadioglu\eFatura\Models\Invoice
+     * @var Invoice[]
      */
     protected $invoices = [];
 
     /**
      * User Informations
-     *
-     * @var furkankadioglu\eFatura\Models\UserInformations
      */
-    protected $userInformations;
-
+    protected UserInformations $userInformations;
 
     /**
      * Operation identifier for SMS Verification
-     *
-     * @var string
      */
-    protected $oid;
+    protected string $oid;
 
     /**
      * Base headers
-     *
-     * @var array
      */
     protected $headers = [
         "accept" => "*/*",
@@ -121,9 +94,6 @@ class InvoiceManager
         "User-Agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Safari/537.36", // Dummy UA
     ];
 
-    /**
-     * Base construct method for guzzle and connection settings
-     */
     public function __construct()
     {
         $this->referrer = $this->getBaseUrl() . self::REFERRER_PATH;
@@ -132,39 +102,24 @@ class InvoiceManager
         $this->client = new Client($this->headers);
     }
 
-    /**
-     * Setter function for username
-     *
-     * @param string $username
-     * @return furkankadioglu\eFatura\InvoiceManager
-     */
-    public function setUsername($username)
+    public function setUsername(string $username)
     {
         $this->username = $username;
+
         return $this;
     }
 
-    /**
-     * Set a debug mode
-     *
-     * @param boolean $status
-     * @return furkankadioglu\eFatura\InvoiceManager
-     */
-    public function setDebugMode($status)
+    public function setDebugMode(bool $status)
     {
         $this->debugMode = $status;
+
         return $this;
     }
 
-    /**
-     * Setter function for password
-     *
-     * @param string $password
-     * @return furkankadioglu\eFatura\InvoiceManager
-     */
-    public function setPassword($password)
+    public function setPassword(string $password)
     {
         $this->password = $password;
+
         return $this;
     }
 
@@ -174,7 +129,7 @@ class InvoiceManager
             "form_params" => [
                 "assoscmd" => "kullaniciOner",
                 "rtype" => "json",
-            ]
+            ],
         ]);
         $body = json_decode($response->getBody(), true);
 
@@ -186,6 +141,7 @@ class InvoiceManager
 
         $this->username = $body["userid"];
         $this->password = "1";
+
         return $this;
     }
 
@@ -194,12 +150,14 @@ class InvoiceManager
      *
      * @param string $username
      * @param string $password
-     * @return furkankadioglu\eFatura\InvoiceManager
+     *
+     * @return self
      */
-    public function setCredentials($username, $password)
+    public function setCredentials(string $username, string $password)
     {
         $this->username = $username;
         $this->password = $password;
+
         return $this;
     }
 
@@ -207,21 +165,22 @@ class InvoiceManager
      * Setter function for token
      *
      * @param string $token
-     * @return furkankadioglu\eFatura\InvoiceManager
+     *
+     * @return self
      */
-    public function setToken($token)
+    public function setToken(string $token)
     {
         $this->token = $token;
-        return $token;
+
+        return $this;
     }
 
     /**
      * Getter function for token
      *
-     * @param string $token
-     * @return furkankadioglu\eFatura\InvoiceManager
+     * @return string
      */
-    public function getToken($token)
+    public function getToken()
     {
         return $this->token;
     }
@@ -229,11 +188,12 @@ class InvoiceManager
     /**
      * Connect with credentials
      *
-     * @return furkankadioglu\eFatura\InvoiceManager
+     * @return self
      */
     public function connect()
     {
         $this->getTokenFromApi();
+
         return $this;
     }
 
@@ -246,7 +206,7 @@ class InvoiceManager
     {
         return [
             $this->username,
-            $this->password
+            $this->password,
         ];
     }
 
@@ -260,26 +220,27 @@ class InvoiceManager
         if ($this->debugMode) {
             return self::TEST_URL;
         }
+
         return self::BASE_URL;
     }
 
     /**
      * Send request, json decode and return response
      *
-     * @param string $url
-     * @param array $parameters
-     * @param array $headers
+     * @param string     $url
+     * @param array      $parameters
+     * @param array|null $headers
+     *
      * @return array
      */
-    private function sendRequestAndGetBody($url, $parameters, $headers = null)
+    private function sendRequestAndGetBody(string $url, array $parameters, array $headers = null)
     {
         $response = $this->client->post($this->getBaseUrl() . "$url", [
-            "headers" => $headers ? $headers : $this->headers,
-            "form_params" => $parameters
+            "headers" => $headers ?: $this->headers,
+            "form_params" => $parameters,
         ]);
 
-        $body = json_decode($response->getBody(), true);
-        return $body;
+        return json_decode($response->getBody(), true);
     }
 
     /**
@@ -295,7 +256,7 @@ class InvoiceManager
             "userid" => $this->username,
             "sifre" => $this->password,
             "sifre2" => $this->password,
-            "parola" => "1"
+            "parola" => "1",
         ];
 
         $body = $this->sendRequestAndGetBody(self::TOKEN_PATH, $parameters, []);
@@ -307,7 +268,7 @@ class InvoiceManager
     /**
      * Logout from API
      *
-     * @return string
+     * @return bool
      */
     public function logOutFromAPI()
     {
@@ -320,6 +281,7 @@ class InvoiceManager
         $body = $this->sendRequestAndGetBody(self::TOKEN_PATH, $parameters, []);
         $this->checkError($body);
         $this->token = null;
+
         return true;
     }
 
@@ -327,9 +289,10 @@ class InvoiceManager
      * Check error, if exist throw it!
      *
      * @param array $jsonData
+     *
      * @return void
      */
-    private function checkError($jsonData)
+    private function checkError(array $jsonData)
     {
         if (isset($jsonData["error"])) {
             throw new ApiException("Sunucu taraflı bir hata oluştu!", 0, null, $jsonData);
@@ -340,29 +303,21 @@ class InvoiceManager
      * Setter function for invoice
      *
      * @param Invoice $invoice
-     * @return furkankadioglu\eFatura\InvoiceManager
+     *
+     * @return self
      */
     public function setInvoice(Invoice $invoice)
     {
         $this->invoice = $invoice;
+
         return $this;
     }
 
-    /**
-     * Getter function for invoice
-     *
-     * @return furkankadioglu\eFatura\Models\Invoice
-     */
     public function getInvoice()
     {
         return $this->invoice;
     }
 
-    /**
-     * Getter function for invoices
-     *
-     * @return array furkankadioglu\eFatura\Models\Invoice
-     */
     public function getInvoices()
     {
         return $this->invoices;
@@ -372,16 +327,17 @@ class InvoiceManager
      * Get company name from tax number via api
      *
      * @param string $taxNr
+     *
      * @return array
      */
-    public function getCompanyInfo($taxNr)
+    public function getCompanyInfo(string $taxNr)
     {
         $parameters = [
             "cmd" => "SICIL_VEYA_MERNISTEN_BILGILERI_GETIR",
             "callid" => Uuid::uuid1()->toString(),
             "pageName" => "RG_BASITFATURA",
             "token" => $this->token,
-            "jp" => '{"vknTcknn":"' . $taxNr . '"}'
+            "jp" => '{"vknTcknn":"' . $taxNr . '"}',
         ];
 
         $body = $this->sendRequestAndGetBody(self::DISPATCH_PATH, $parameters);
@@ -395,16 +351,17 @@ class InvoiceManager
      *
      * @param string $startDate
      * @param string $endDate
+     *
      * @return array
      */
-    public function getInvoicesFromAPI($startDate, $endDate)
+    public function getInvoicesFromAPI(string $startDate, string $endDate)
     {
         $parameters = [
             "cmd" => "EARSIV_PORTAL_TASLAKLARI_GETIR",
             "callid" => Uuid::uuid1()->toString(),
             "pageName" => "RG_BASITTASLAKLAR",
             "token" => $this->token,
-            "jp" => '{"baslangic":"' . $startDate . '","bitis":"' . $endDate . '","hangiTip":"5000/30000", "table":[]}'
+            "jp" => '{"baslangic":"' . $startDate . '","bitis":"' . $endDate . '","hangiTip":"5000/30000", "table":[]}',
         ];
 
         $body = $this->sendRequestAndGetBody(self::DISPATCH_PATH, $parameters);
@@ -425,7 +382,7 @@ class InvoiceManager
     {
 
         $headers = [
-            "referrer" => $this->referrer
+            "referrer" => $this->referrer,
         ];
 
         $parameters = [
@@ -433,7 +390,7 @@ class InvoiceManager
             "callid" => Uuid::uuid1()->toString(),
             "pageName" => "MAINTREEMENU",
             "token" => $this->token,
-            "jp" => '{"ANONIM_LOGIN":"1"}'
+            "jp" => '{"ANONIM_LOGIN":"1"}',
         ];
 
         $body = $this->sendRequestAndGetBody(self::DISPATCH_PATH, $parameters, $headers);
@@ -445,8 +402,9 @@ class InvoiceManager
     /**
      * Create draft basic invoice
      *
-     * @param Invoice $invoice
-     * @return furkankadioglu\eFatura\Models\Invoice
+     * @param \furkankadioglu\eFatura\Models\Invoice|null $invoice
+     *
+     * @return self
      */
     public function createDraftBasicInvoice(Invoice $invoice = null)
     {
@@ -463,7 +421,7 @@ class InvoiceManager
             "callid" => Uuid::uuid1()->toString(),
             "pageName" => "RG_BASITFATURA",
             "token" => $this->token,
-            "jp" => "" . json_encode($this->invoice->export()) . ""
+            "jp" => "" . json_encode($this->invoice->export()) . "",
         ];
 
         $body = $this->sendRequestAndGetBody(self::DISPATCH_PATH, $parameters);
@@ -479,10 +437,12 @@ class InvoiceManager
     /**
      * Get html invoice
      *
-     * @param Invoice $invoice
-     * @return void
+     * @param \furkankadioglu\eFatura\Models\Invoice|null $invoice
+     * @param bool                                        $signed
+     *
+     * @return string
      */
-    public function getInvoiceHTML(Invoice $invoice = null, $signed = true)
+    public function getInvoiceHTML(Invoice $invoice = null, bool $signed = true)
     {
         if ($invoice != null) {
             $this->invoice = $invoice;
@@ -494,7 +454,7 @@ class InvoiceManager
 
         $data = [
             "ettn" => $this->invoice->getUuid(),
-            "onayDurumu" => $signed ? "Onaylandı" : "Onaylanmadı"
+            "onayDurumu" => $signed ? "Onaylandı" : "Onaylanmadı",
         ];
 
         $parameters = [
@@ -514,25 +474,29 @@ class InvoiceManager
     /**
      * PDF Export
      *
-     * @param Invoice $invoice
-     * @param boolean $signed
-     * @return Mpdf\Mpdf
+     * @param \furkankadioglu\eFatura\Models\Invoice|null $invoice
+     * @param boolean                                     $signed
+     *
+     * @return string|void
      */
-    public function getInvoicePDF(Invoice $invoice = null, $signed = true)
+    public function getInvoicePDF(Invoice $invoice = null, bool $signed = true)
     {
         $data = $this->getInvoiceHTML($invoice, $signed);
         $mpdf = new Mpdf();
         $mpdf->WriteHTML($data);
+
         return $mpdf->Output();
     }
 
     /**
      * Cancel an invoice
      *
-     * @param Invoice $invoice
+     * @param \furkankadioglu\eFatura\Models\Invoice|null $invoice
+     * @param string                                      $reason
+     *
      * @return boolean
      */
-    public function cancelInvoice(Invoice $invoice = null, $reason = "Yanlış İşlem")
+    public function cancelInvoice(Invoice $invoice = null, string $reason = "Yanlış İşlem")
     {
         if ($invoice != null) {
             $this->invoice = $invoice;
@@ -544,7 +508,7 @@ class InvoiceManager
 
         $data = [
             "silinecekler" => [$this->invoice->getSummary()],
-            "aciklama" => $reason
+            "aciklama" => $reason,
         ];
 
 
@@ -569,7 +533,8 @@ class InvoiceManager
     /**
      * Get an invoice from API
      *
-     * @param Invoice $invoice
+     * @param \furkankadioglu\eFatura\Models\Invoice|null $invoice
+     *
      * @return array
      */
     public function getInvoiceFromAPI(Invoice $invoice = null)
@@ -583,7 +548,7 @@ class InvoiceManager
         }
 
         $data = [
-            "ettn" => $this->invoice->getUuid()
+            "ettn" => $this->invoice->getUuid(),
         ];
 
         $parameters = [
@@ -604,11 +569,12 @@ class InvoiceManager
     /**
      * Get download url
      *
-     * @param Invoice $invoice
-     * @param boolean $signed
+     * @param \furkankadioglu\eFatura\Models\Invoice|null $invoice
+     * @param boolean                                     $signed
+     *
      * @return string
      */
-    public function getDownloadURL(Invoice $invoice = null, $signed = true)
+    public function getDownloadURL(Invoice $invoice = null, bool $signed = true)
     {
         if ($invoice != null) {
             $this->invoice = $invoice;
@@ -626,19 +592,19 @@ class InvoiceManager
     /**
      * Set invoice manager user informations
      *
-     * @param furkankadioglu\eFatura\Models\UserInformations $userInformations
-     * @return furkankadioglu\eFatura\Models\Invoice
+     * @param \furkankadioglu\eFatura\Models\UserInformations $userInformations
+     *
+     * @return self
      */
     public function setUserInformations(UserInformations $userInformations)
     {
         $this->userInformations = $userInformations;
+
         return $this;
     }
 
     /**
      * Get invoice manager user informations
-     *
-     * @return furkankadioglu\eFatura\Models\UserInformations
      */
     public function getUserInformations()
     {
@@ -648,7 +614,7 @@ class InvoiceManager
     /**
      * Get user informations data
      *
-     * @return furkankadioglu\eFatura\Models\UserInformations
+     * @return UserInformations
      */
     public function getUserInformationsData()
     {
@@ -664,6 +630,7 @@ class InvoiceManager
         $this->checkError($body);
 
         $userInformations = new UserInformations($body["data"]);
+
         return $this->userInformations = $userInformations;
     }
 
@@ -672,35 +639,38 @@ class InvoiceManager
      *
      * @param string $startDate
      * @param string $endDate
-     * @param array $ettn
+     * @param array  $ettn
+     *
      * @return array
      */
-    public function getEttnInvoiceFromAPIArray($startDate, $endDate, $ettn)
+    public function getEttnInvoiceFromAPIArray(string $startDate, string $endDate, array $ettn)
     {
         $parameters = [
             "cmd" => "EARSIV_PORTAL_TASLAKLARI_GETIR",
             "callid" => Uuid::uuid1()->toString(),
             "pageName" => "RG_BASITTASLAKLAR",
             "token" => $this->token,
-            "jp" => '{"baslangic":"' . $startDate . '","bitis":"' . $endDate . '","hangiTip":"5000/30000", "table":[]}'
+            "jp" => '{"baslangic":"' . $startDate . '","bitis":"' . $endDate . '","hangiTip":"5000/30000", "table":[]}',
         ];
         $body = $this->sendRequestAndGetBody(self::DISPATCH_PATH, $parameters);
         $this->checkError($body);
         $data = $body['data'];
-        $dataFiltered = array();
-        foreach($data as $item){
-	        if($item["onayDurumu"] == "Onaylanmadı" AND in_array($item["ettn"], $ettn)){
-		        array_push($dataFiltered, $item);
-	        }
+        $dataFiltered = [];
+        foreach ($data as $item) {
+            if ($item["onayDurumu"] == "Onaylanmadı" and in_array($item["ettn"], $ettn)) {
+                array_push($dataFiltered, $item);
+            }
         }
         $this->invoices = $dataFiltered;
+
         return $dataFiltered;
     }
 
     /**
      * Send user informations data
      *
-     * @param Invoice $invoice
+     * @param UserInformations|null $userInformations
+     *
      * @return array
      */
     public function sendUserInformationsData(UserInformations $userInformations = null)
@@ -732,9 +702,8 @@ class InvoiceManager
      *
      * @return boolean
      */
-     
-     private function initializeSMSVerification()
-     {
+    private function initializeSMSVerification()
+    {
         $parameters = [
             "cmd" => "EARSIV_PORTAL_TELEFONNO_SORGULA",
             "callid" => Uuid::uuid1()->toString(),
@@ -746,29 +715,29 @@ class InvoiceManager
         $body = $this->sendRequestAndGetBody(self::DISPATCH_PATH, $parameters);
         $this->checkError($body);
 
-        if(!isset($body["data"]["telefon"]))
-        {
+        if (! isset($body["data"]["telefon"])) {
             return false;
         }
 
         return true;
     }
-    
-    
+
+
     /**
      * Send user informations data
      *
      * @param string $phoneNumber
+     *
      * @return array
      */
-    public function sendSMSVerification($phoneNumber)
+    public function sendSMSVerification(string $phoneNumber)
     {
         $this->initializeSMSVerification();
-        
+
         $data = [
             "CEPTEL" => $phoneNumber,
             "KCEPTEL" => false,
-            "TIP" => ""
+            "TIP" => "",
         ];
 
         $parameters = [
@@ -790,8 +759,10 @@ class InvoiceManager
     /**
      * Send user informations data
      *
-     * @param string $phoneNumber
-     * @return array
+     * @param $code
+     * @param $operationId
+     *
+     * @return bool
      */
     public function verifySMSCode($code, $operationId)
     {
@@ -813,13 +784,11 @@ class InvoiceManager
         $body = $this->sendRequestAndGetBody(self::DISPATCH_PATH, $parameters);
         $this->checkError($body);
 
-        if(!isset($body["data"]["sonuc"]))
-        {
+        if (! isset($body["data"]["sonuc"])) {
             return false;
         }
-        
-        if($body["data"]["sonuc"] == 0)
-        {
+
+        if ($body["data"]["sonuc"] == 0) {
             return false;
         }
 

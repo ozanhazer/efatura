@@ -1,65 +1,84 @@
-<?php 
+<?php
 
 namespace furkankadioglu\eFatura\Models;
 
 use furkankadioglu\eFatura\Traits\Exportable;
 
-class UserInformations {
-
+class UserInformations
+{
     use Exportable;
 
     protected $vknTckn; // Read only 🚨
+
     protected $unvan;
+
     protected $ad;
+
     protected $soyad;
+
     protected $sicilNo;
+
     protected $mersisNo;
+
     protected $vergiDairesi;
+
     protected $cadde;
+
     protected $apartmanAdi;
+
     protected $apartmanNo;
+
     protected $kapiNo;
+
     protected $kasaba;
+
     protected $ilce;
+
     protected $il;
+
     protected $postaKodu;
+
     protected $ulke;
+
     protected $telNo;
+
     protected $faksNo;
+
     protected $ePostaAdresi;
+
     protected $webSitesiAdresi;
+
     protected $isMerkezi;
 
     /**
      * Initialize function
      *
-     * @param array $data
+     * @param array|null $data
      */
-    public function __construct($data = null)
+    public function __construct(array $data = null)
     {
-        if($data != null)
-        {
-            $this->vknTckn = isset($data["vknTckn"]) ? $data["vknTckn"] : null;
-            $this->unvan = isset($data["unvan"]) ? $data["unvan"] : null;
-            $this->ad = isset($data["ad"]) ? $data["ad"] : null;
-            $this->soyad = isset($data["soyad"]) ? $data["soyad"] : null;
-            $this->sicilNo = isset($data["sicilNo"]) ? $data["sicilNo"] : null;
-            $this->mersisNo = isset($data["mersisNo"]) ? $data["mersisNo"] : null;
-            $this->vergiDairesi = isset($data["vergiDairesi"]) ? $data["vergiDairesi"] : null;
-            $this->cadde = isset($data["cadde"]) ? $data["cadde"] : null;
-            $this->apartmanAdi = isset($data["apartmanAdi"]) ? $data["apartmanAdi"] : null;
-            $this->apartmanNo = isset($data["apartmanNo"]) ? $data["apartmanNo"] : null;
-            $this->kapiNo = isset($data["kapiNo"]) ? $data["kapiNo"] : null;
-            $this->kasaba = isset($data["kasaba"]) ? $data["kasaba"] : null;
-            $this->ilce = isset($data["ilce"]) ? $data["ilce"] : null;
-            $this->il = isset($data["il"]) ? $data["il"] : null;
-            $this->postaKodu = isset($data["postaKodu"]) ? $data["postaKodu"] : null;
-            $this->ulke = isset($data["ulke"]) ? $data["ulke"] : null;
-            $this->telNo = isset($data["telNo"]) ? $data["telNo"] : null;
-            $this->faksNo = isset($data["faksNo"]) ? $data["faksNo"] : null;
-            $this->ePostaAdresi = isset($data["ePostaAdresi"]) ? $data["ePostaAdresi"] : null;
-            $this->webSitesiAdresi = isset($data["webSitesiAdresi"]) ? $data["webSitesiAdresi"] : null;
-            $this->isMerkezi = isset($data["isMerkezi"]) ? $data["isMerkezi"] : null;
+        if ($data != null) {
+            $this->vknTckn = $data["vknTckn"] ?? null;
+            $this->unvan = $data["unvan"] ?? null;
+            $this->ad = $data["ad"] ?? null;
+            $this->soyad = $data["soyad"] ?? null;
+            $this->sicilNo = $data["sicilNo"] ?? null;
+            $this->mersisNo = $data["mersisNo"] ?? null;
+            $this->vergiDairesi = $data["vergiDairesi"] ?? null;
+            $this->cadde = $data["cadde"] ?? null;
+            $this->apartmanAdi = $data["apartmanAdi"] ?? null;
+            $this->apartmanNo = $data["apartmanNo"] ?? null;
+            $this->kapiNo = $data["kapiNo"] ?? null;
+            $this->kasaba = $data["kasaba"] ?? null;
+            $this->ilce = $data["ilce"] ?? null;
+            $this->il = $data["il"] ?? null;
+            $this->postaKodu = $data["postaKodu"] ?? null;
+            $this->ulke = $data["ulke"] ?? null;
+            $this->telNo = $data["telNo"] ?? null;
+            $this->faksNo = $data["faksNo"] ?? null;
+            $this->ePostaAdresi = $data["ePostaAdresi"] ?? null;
+            $this->webSitesiAdresi = $data["webSitesiAdresi"] ?? null;
+            $this->isMerkezi = $data["isMerkezi"] ?? null;
         }
     }
 
@@ -91,13 +110,13 @@ class UserInformations {
             "faksNo" => $this->faksNo,
             "ePostaAdresi" => $this->ePostaAdresi,
             "webSitesiAdresi" => $this->webSitesiAdresi,
-            "isMerkezi" => $this->isMerkezi
+            "isMerkezi" => $this->isMerkezi,
         ];
     }
 
     /**
      * Get the value of vknTckn (This field readonly!)
-     */ 
+     */
     public function getVknTckn()
     {
         return $this->vknTckn;
@@ -106,7 +125,7 @@ class UserInformations {
 
     /**
      * Get the value of unvan
-     */ 
+     */
     public function getUnvan()
     {
         return $this->unvan;
@@ -116,7 +135,7 @@ class UserInformations {
      * Set the value of unvan
      *
      * @return  self
-     */ 
+     */
     public function setUnvan($unvan)
     {
         $this->unvan = $unvan;
@@ -126,7 +145,7 @@ class UserInformations {
 
     /**
      * Get the value of ad
-     */ 
+     */
     public function getAd()
     {
         return $this->ad;
@@ -136,7 +155,7 @@ class UserInformations {
      * Set the value of ad
      *
      * @return  self
-     */ 
+     */
     public function setAd($ad)
     {
         $this->ad = $ad;
@@ -146,7 +165,7 @@ class UserInformations {
 
     /**
      * Get the value of soyad
-     */ 
+     */
     public function getSoyad()
     {
         return $this->soyad;
@@ -156,7 +175,7 @@ class UserInformations {
      * Set the value of soyad
      *
      * @return  self
-     */ 
+     */
     public function setSoyad($soyad)
     {
         $this->soyad = $soyad;
@@ -166,7 +185,7 @@ class UserInformations {
 
     /**
      * Get the value of sicilNo
-     */ 
+     */
     public function getSicilNo()
     {
         return $this->sicilNo;
@@ -176,7 +195,7 @@ class UserInformations {
      * Set the value of sicilNo
      *
      * @return  self
-     */ 
+     */
     public function setSicilNo($sicilNo)
     {
         $this->sicilNo = $sicilNo;
@@ -186,7 +205,7 @@ class UserInformations {
 
     /**
      * Get the value of mersisNo
-     */ 
+     */
     public function getMersisNo()
     {
         return $this->mersisNo;
@@ -196,7 +215,7 @@ class UserInformations {
      * Set the value of mersisNo
      *
      * @return  self
-     */ 
+     */
     public function setMersisNo($mersisNo)
     {
         $this->mersisNo = $mersisNo;
@@ -206,7 +225,7 @@ class UserInformations {
 
     /**
      * Get the value of vergiDairesi
-     */ 
+     */
     public function getVergiDairesi()
     {
         return $this->vergiDairesi;
@@ -216,7 +235,7 @@ class UserInformations {
      * Set the value of vergiDairesi
      *
      * @return  self
-     */ 
+     */
     public function setVergiDairesi($vergiDairesi)
     {
         $this->vergiDairesi = $vergiDairesi;
@@ -226,7 +245,7 @@ class UserInformations {
 
     /**
      * Get the value of cadde
-     */ 
+     */
     public function getCadde()
     {
         return $this->cadde;
@@ -236,7 +255,7 @@ class UserInformations {
      * Set the value of cadde
      *
      * @return  self
-     */ 
+     */
     public function setCadde($cadde)
     {
         $this->cadde = $cadde;
@@ -246,7 +265,7 @@ class UserInformations {
 
     /**
      * Get the value of apartmanAdi
-     */ 
+     */
     public function getApartmanAdi()
     {
         return $this->apartmanAdi;
@@ -256,7 +275,7 @@ class UserInformations {
      * Set the value of apartmanAdi
      *
      * @return  self
-     */ 
+     */
     public function setApartmanAdi($apartmanAdi)
     {
         $this->apartmanAdi = $apartmanAdi;
@@ -266,7 +285,7 @@ class UserInformations {
 
     /**
      * Get the value of apartmanNo
-     */ 
+     */
     public function getApartmanNo()
     {
         return $this->apartmanNo;
@@ -276,7 +295,7 @@ class UserInformations {
      * Set the value of apartmanNo
      *
      * @return  self
-     */ 
+     */
     public function setApartmanNo($apartmanNo)
     {
         $this->apartmanNo = $apartmanNo;
@@ -286,7 +305,7 @@ class UserInformations {
 
     /**
      * Get the value of kapiNo
-     */ 
+     */
     public function getKapiNo()
     {
         return $this->kapiNo;
@@ -296,7 +315,7 @@ class UserInformations {
      * Set the value of kapiNo
      *
      * @return  self
-     */ 
+     */
     public function setKapiNo($kapiNo)
     {
         $this->kapiNo = $kapiNo;
@@ -306,7 +325,7 @@ class UserInformations {
 
     /**
      * Get the value of kasaba
-     */ 
+     */
     public function getKasaba()
     {
         return $this->kasaba;
@@ -316,7 +335,7 @@ class UserInformations {
      * Set the value of kasaba
      *
      * @return  self
-     */ 
+     */
     public function setKasaba($kasaba)
     {
         $this->kasaba = $kasaba;
@@ -326,7 +345,7 @@ class UserInformations {
 
     /**
      * Get the value of ilce
-     */ 
+     */
     public function getIlce()
     {
         return $this->ilce;
@@ -336,7 +355,7 @@ class UserInformations {
      * Set the value of ilce
      *
      * @return  self
-     */ 
+     */
     public function setIlce($ilce)
     {
         $this->ilce = $ilce;
@@ -346,7 +365,7 @@ class UserInformations {
 
     /**
      * Get the value of il
-     */ 
+     */
     public function getIl()
     {
         return $this->il;
@@ -356,7 +375,7 @@ class UserInformations {
      * Set the value of il
      *
      * @return  self
-     */ 
+     */
     public function setIl($il)
     {
         $this->il = $il;
@@ -366,7 +385,7 @@ class UserInformations {
 
     /**
      * Get the value of postaKodu
-     */ 
+     */
     public function getPostaKodu()
     {
         return $this->postaKodu;
@@ -376,7 +395,7 @@ class UserInformations {
      * Set the value of postaKodu
      *
      * @return  self
-     */ 
+     */
     public function setPostaKodu($postaKodu)
     {
         $this->postaKodu = $postaKodu;
@@ -386,7 +405,7 @@ class UserInformations {
 
     /**
      * Get the value of ulke
-     */ 
+     */
     public function getUlke()
     {
         return $this->ulke;
@@ -396,7 +415,7 @@ class UserInformations {
      * Set the value of ulke
      *
      * @return  self
-     */ 
+     */
     public function setUlke($ulke)
     {
         $this->ulke = $ulke;
@@ -406,7 +425,7 @@ class UserInformations {
 
     /**
      * Get the value of telNo
-     */ 
+     */
     public function getTelNo()
     {
         return $this->telNo;
@@ -416,7 +435,7 @@ class UserInformations {
      * Set the value of telNo
      *
      * @return  self
-     */ 
+     */
     public function setTelNo($telNo)
     {
         $this->telNo = $telNo;
@@ -426,7 +445,7 @@ class UserInformations {
 
     /**
      * Get the value of faksNo
-     */ 
+     */
     public function getFaksNo()
     {
         return $this->faksNo;
@@ -436,7 +455,7 @@ class UserInformations {
      * Set the value of faksNo
      *
      * @return  self
-     */ 
+     */
     public function setFaksNo($faksNo)
     {
         $this->faksNo = $faksNo;
@@ -446,7 +465,7 @@ class UserInformations {
 
     /**
      * Get the value of ePostaAdresi
-     */ 
+     */
     public function getEPostaAdresi()
     {
         return $this->ePostaAdresi;
@@ -456,7 +475,7 @@ class UserInformations {
      * Set the value of ePostaAdresi
      *
      * @return  self
-     */ 
+     */
     public function setEPostaAdresi($ePostaAdresi)
     {
         $this->ePostaAdresi = $ePostaAdresi;
@@ -466,7 +485,7 @@ class UserInformations {
 
     /**
      * Get the value of webSitesiAdresi
-     */ 
+     */
     public function getWebSitesiAdresi()
     {
         return $this->webSitesiAdresi;
@@ -476,7 +495,7 @@ class UserInformations {
      * Set the value of webSitesiAdresi
      *
      * @return  self
-     */ 
+     */
     public function setWebSitesiAdresi($webSitesiAdresi)
     {
         $this->webSitesiAdresi = $webSitesiAdresi;
@@ -486,7 +505,7 @@ class UserInformations {
 
     /**
      * Get the value of isMerkezi
-     */ 
+     */
     public function getIsMerkezi()
     {
         return $this->isMerkezi;
@@ -496,7 +515,7 @@ class UserInformations {
      * Set the value of isMerkezi
      *
      * @return  self
-     */ 
+     */
     public function setIsMerkezi($isMerkezi)
     {
         $this->isMerkezi = $isMerkezi;

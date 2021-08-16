@@ -17,7 +17,6 @@ class InvoiceTest extends TestCase
      */
     public function setAndGetAllInvoiceVariables()
     {
-        $client = new InvoiceManager();
         $inv = new Invoice();
         $uuid = Uuid::uuid1()->toString();
         $inv->setUuid($uuid);

@@ -13,55 +13,105 @@ class Invoice
     use Exportable;
 
     protected $uuid;
+
     protected $documentNumber = "";
+
     protected $date;
+
     protected $time;
+
     protected $currency;
+
     protected $currencyRate;
+
     protected $invoiceType;
+
     protected $whichType;
+
     protected $taxOrIdentityNumber;
+
     protected $invoiceAcceptorTitle;
+
     protected $invoiceAcceptorName;
+
     protected $invoiceAcceptorLastName;
+
     protected $buildingName;
+
     protected $buildingNumber;
+
     protected $doorNumber;
+
     protected $town;
+
     protected $taxAdministration;
+
     protected $country;
+
     protected $avenueStreet;
+
     protected $district;
+
     protected $city;
+
     protected $postNumber;
+
     protected $telephoneNumber;
+
     protected $faxNumber;
+
     protected $email;
+
     protected $website;
+
     protected $refundTable;
+
     protected $specialBaseAmount;      // Özel Matrah Tutarı 😅
+
     protected $specialBasePercent;     // Özel Matrah Oranı 😅
+
     protected $specialBaseTaxAmount;   // Özel Matrah Vergi Tutarı 😅
+
     protected $taxType;
+
     protected $itemOrServiceList;
+
     protected $type;
+
     protected $base;                   // Matrah
+
     protected $itemOrServiceTotalPrice;
+
     protected $totalDiscount;
+
     protected $calculatedVAT;
+
     protected $taxTotalPrice;
+
     protected $includedTaxesTotalPrice;
+
     protected $paymentPrice;
+
     protected $note;
+
     protected $orderNumber = "";
+
     protected $orderData = "";
+
     protected $waybillNumber = "";       // İrsaliye
+
     protected $waybillDate = "";
+
     protected $receiptNumber = "";
+
     protected $voucherDate = "";
+
     protected $voucherTime = "";
+
     protected $voucherType = "";
+
     protected $zReportNumber = "";
+
     protected $okcSerialNumber = "";
 
     public function __construct($data = [])
@@ -72,114 +122,114 @@ class Invoice
 
     public function mapWithTurkishKeys($data)
     {
-        $this->uuid = isset($data["faturaUuid"]) ? $data["faturaUuid"] : Uuid::uuid1()->toString();
-        $this->documentNumber = isset($data["belgeNumarasi"]) ? $data["belgeNumarasi"] : "";
-        $this->date = isset($data["faturaTarihi"]) ? $data["faturaTarihi"] : "";
-        $this->time = isset($data["saat"]) ? $data["saat"] : "";
-        $this->currency = isset($data["paraBirimi"]) ? $data["paraBirimi"] : "";
-        $this->currencyRate = isset($data["dovzTLkur"]) ? $data["dovzTLkur"] : "";
-        $this->invoiceType = isset($data["faturaTipi"]) ? $data["faturaTipi"] : "";
-        $this->whichType = isset($data["hangiTip"]) ? $data["hangiTip"] : "5000/30000";
-        $this->taxOrIdentityNumber = isset($data["vknTckn"]) ? $data["vknTckn"] : "11111111111";
-        $this->invoiceAcceptorTitle = isset($data["aliciUnvan"]) ? $data["aliciUnvan"] : "";
-        $this->invoiceAcceptorName = isset($data["aliciAdi"]) ? $data["aliciAdi"] : "";
-        $this->invoiceAcceptorLastName = isset($data["aliciSoyadi"]) ? $data["aliciSoyadi"] : "";
-        $this->buildingName = isset($data["binaAdi"]) ? $data["binaAdi"] : "";
-        $this->buildingNumber = isset($data["binaNo"]) ? $data["binaNo"] : "";
-        $this->doorNumber = isset($data["kapiNo"]) ? $data["kapiNo"] : "";
-        $this->town = isset($data["kasabaKoy"]) ? $data["kasabaKoy"] : "";
-        $this->taxAdministration = isset($data["vergiDairesi"]) ? $data["vergiDairesi"] : "";
-        $this->country = isset($data["ulke"]) ? $data["ulke"] : "";
-        $this->avenueStreet = isset($data["bulvarcaddesokak"]) ? $data["bulvarcaddesokak"] : "";
-        $this->district = isset($data["mahalleSemtIlce"]) ? $data["mahalleSemtIlce"] : "";
-        $this->city = isset($data["sehir"]) ? $data["sehir"] : "";
-        $this->postNumber = isset($data["postaKodu"]) ? $data["postaKodu"] : "";
-        $this->telephoneNumber = isset($data["tel"]) ? $data["tel"] : "";
-        $this->faxNumber = isset($data["fax"]) ? $data["fax"] : "";
-        $this->email = isset($data["eposta"]) ? $data["eposta"] : "";
-        $this->website = isset($data["websitesi"]) ? $data["websitesi"] : "";
-        $this->refundTable = isset($data["iadeTable"]) ? $data["iadeTable"] : [];
-        $this->specialBaseAmount = isset($data["ozelMatrahTutari"]) ? $data["ozelMatrahTutari"] : "0";
-        $this->specialBasePercent = isset($data["ozelMatrahOrani"]) ? $data["ozelMatrahOrani"] : "0";
-        $this->specialBaseTaxAmount = isset($data["ozelMatrahVergiTutari"]) ? $data["ozelMatrahVergiTutari"] : "0";
-        $this->taxType = isset($data["vergiCesidi"]) ? $data["vergiCesidi"] : "";
-        $this->itemOrServiceList = isset($data["malHizmetTable"]) ? $data["malHizmetTable"] : [];
-        $this->type = isset($data["tip"]) ? $data["tip"] : "İskonto";
-        $this->base = isset($data["matrah"]) ? $data["matrah"] : "";
-        $this->itemOrServiceTotalPrice = isset($data["malhizmetToplamTutari"]) ? $data["malhizmetToplamTutari"] : "";
-        $this->totalDiscount = isset($data["toplamIskonto"]) ? $data["toplamIskonto"] : "";
-        $this->calculatedVAT = isset($data["hesaplanankdv"]) ? $data["hesaplanankdv"] : "";
-        $this->taxTotalPrice = isset($data["vergilerToplami"]) ? $data["vergilerToplami"] : "";
-        $this->includedTaxesTotalPrice = isset($data["vergilerDahilToplamTutar"]) ? $data["vergilerDahilToplamTutar"] : "";
-        $this->paymentPrice = isset($data["odenecekTutar"]) ? $data["odenecekTutar"] : "";
-        $this->note = isset($data["not"]) ? $data["not"] : "";
-        $this->orderNumber = isset($data["siparisNumarasi"]) ? $data["siparisNumarasi"] : "";
-        $this->orderData = isset($data["siparisTarihi"]) ? $data["siparisTarihi"] : "";
-        $this->waybillNumber = isset($data["irsaliyeNumarasi"]) ? $data["irsaliyeNumarasi"] : "";
-        $this->waybillDate = isset($data["irsaliyeTarihi"]) ? $data["irsaliyeTarihi"] : "";
-        $this->receiptNumber = isset($data["fisNo"]) ? $data["fisNo"] : "";
-        $this->voucherDate = isset($data["fisTarihi"]) ? $data["fisTarihi"] : "";
-        $this->voucherTime = isset($data["fisSaati"]) ? $data["fisSaati"] : "";
-        $this->voucherType = isset($data["fisTipi"]) ? $data["fisTipi"] : "";
-        $this->zReportNumber = isset($data["zRaporNo"]) ? $data["zRaporNo"] : "";
-        $this->okcSerialNumber = isset($data["okcSeriNo"]) ? $data["okcSeriNo"] : "";
+        $this->uuid = $data["faturaUuid"] ?? Uuid::uuid1()->toString();
+        $this->documentNumber = $data["belgeNumarasi"] ?? "";
+        $this->date = $data["faturaTarihi"] ?? "";
+        $this->time = $data["saat"] ?? "";
+        $this->currency = $data["paraBirimi"] ?? "";
+        $this->currencyRate = $data["dovzTLkur"] ?? "";
+        $this->invoiceType = $data["faturaTipi"] ?? "";
+        $this->whichType = $data["hangiTip"] ?? "5000/30000";
+        $this->taxOrIdentityNumber = $data["vknTckn"] ?? "11111111111";
+        $this->invoiceAcceptorTitle = $data["aliciUnvan"] ?? "";
+        $this->invoiceAcceptorName = $data["aliciAdi"] ?? "";
+        $this->invoiceAcceptorLastName = $data["aliciSoyadi"] ?? "";
+        $this->buildingName = $data["binaAdi"] ?? "";
+        $this->buildingNumber = $data["binaNo"] ?? "";
+        $this->doorNumber = $data["kapiNo"] ?? "";
+        $this->town = $data["kasabaKoy"] ?? "";
+        $this->taxAdministration = $data["vergiDairesi"] ?? "";
+        $this->country = $data["ulke"] ?? "";
+        $this->avenueStreet = $data["bulvarcaddesokak"] ?? "";
+        $this->district = $data["mahalleSemtIlce"] ?? "";
+        $this->city = $data["sehir"] ?? "";
+        $this->postNumber = $data["postaKodu"] ?? "";
+        $this->telephoneNumber = $data["tel"] ?? "";
+        $this->faxNumber = $data["fax"] ?? "";
+        $this->email = $data["eposta"] ?? "";
+        $this->website = $data["websitesi"] ?? "";
+        $this->refundTable = $data["iadeTable"] ?? [];
+        $this->specialBaseAmount = $data["ozelMatrahTutari"] ?? "0";
+        $this->specialBasePercent = $data["ozelMatrahOrani"] ?? "0";
+        $this->specialBaseTaxAmount = $data["ozelMatrahVergiTutari"] ?? "0";
+        $this->taxType = $data["vergiCesidi"] ?? "";
+        $this->itemOrServiceList = $data["malHizmetTable"] ?? [];
+        $this->type = $data["tip"] ?? "İskonto";
+        $this->base = $data["matrah"] ?? "";
+        $this->itemOrServiceTotalPrice = $data["malhizmetToplamTutari"] ?? "";
+        $this->totalDiscount = $data["toplamIskonto"] ?? "";
+        $this->calculatedVAT = $data["hesaplanankdv"] ?? "";
+        $this->taxTotalPrice = $data["vergilerToplami"] ?? "";
+        $this->includedTaxesTotalPrice = $data["vergilerDahilToplamTutar"] ?? "";
+        $this->paymentPrice = $data["odenecekTutar"] ?? "";
+        $this->note = $data["not"] ?? "";
+        $this->orderNumber = $data["siparisNumarasi"] ?? "";
+        $this->orderData = $data["siparisTarihi"] ?? "";
+        $this->waybillNumber = $data["irsaliyeNumarasi"] ?? "";
+        $this->waybillDate = $data["irsaliyeTarihi"] ?? "";
+        $this->receiptNumber = $data["fisNo"] ?? "";
+        $this->voucherDate = $data["fisTarihi"] ?? "";
+        $this->voucherTime = $data["fisSaati"] ?? "";
+        $this->voucherType = $data["fisTipi"] ?? "";
+        $this->zReportNumber = $data["zRaporNo"] ?? "";
+        $this->okcSerialNumber = $data["okcSeriNo"] ?? "";
 
         $this->insertChecks($data);
     }
 
     public function mapWithEnglishKeys($data)
     {
-        $this->uuid = isset($data["uuid"]) ? $data["uuid"] : Uuid::uuid1()->toString();
-        $this->documentNumber = isset($data["documentNumber"]) ? $data["documentNumber"] : "";
-        $this->date = isset($data["date"]) ? $data["date"] : "";
-        $this->time = isset($data["time"]) ? $data["time"] : "";
-        $this->currency = isset($data["currency"]) ? $data["currency"] : "";
-        $this->currencyRate = isset($data["currencyRate"]) ? $data["currencyRate"] : "";
-        $this->invoiceType = isset($data["invoiceType"]) ? $data["invoiceType"] : "";
-        $this->whichType = isset($data["whichType"]) ? $data["whichType"] : "5000/30000";
-        $this->taxOrIdentityNumber = isset($data["taxOrIdentityNumber"]) ? $data["taxOrIdentityNumber"] : "11111111111";
-        $this->invoiceAcceptorTitle = isset($data["invoiceAcceptorTitle"]) ? $data["invoiceAcceptorTitle"] : "";
-        $this->invoiceAcceptorName = isset($data["invoiceAcceptorName"]) ? $data["invoiceAcceptorName"] : "";
-        $this->invoiceAcceptorLastName = isset($data["invoiceAcceptorLastName"]) ? $data["invoiceAcceptorLastName"] : "";
-        $this->buildingName = isset($data["buildingName"]) ? $data["buildingName"] : "";
-        $this->buildingNumber = isset($data["buildingNumber"]) ? $data["buildingNumber"] : "";
-        $this->doorNumber = isset($data["doorNumber"]) ? $data["doorNumber"] : "";
-        $this->town = isset($data["town"]) ? $data["town"] : "";
-        $this->taxAdministration = isset($data["taxAdministration"]) ? $data["taxAdministration"] : "";
-        $this->country = isset($data["country"]) ? $data["country"] : "";
-        $this->avenueStreet = isset($data["avenueStreet"]) ? $data["avenueStreet"] : "";
-        $this->district = isset($data["district"]) ? $data["district"] : "";
-        $this->city = isset($data["city"]) ? $data["city"] : "";
-        $this->postNumber = isset($data["postNumber"]) ? $data["postNumber"] : "";
-        $this->telephoneNumber = isset($data["telephoneNumber"]) ? $data["telephoneNumber"] : "";
-        $this->faxNumber = isset($data["faxNumber"]) ? $data["faxNumber"] : "";
-        $this->email = isset($data["email"]) ? $data["email"] : "";
-        $this->website = isset($data["website"]) ? $data["website"] : "";
-        $this->refundTable = isset($data["refundTable"]) ? $data["refundTable"] : [];
-        $this->specialBaseAmount = isset($data["specialBaseAmount"]) ? $data["specialBaseAmount"] : "0";
-        $this->specialBasePercent = isset($data["specialBasePercent"]) ? $data["specialBasePercent"] : "0";
-        $this->specialBaseTaxAmount = isset($data["specialBaseTaxAmount"]) ? $data["specialBaseTaxAmount"] : "0";
-        $this->taxType = isset($data["taxType"]) ? $data["taxType"] : "";
-        $this->itemOrServiceList = isset($data["itemOrServiceList"]) ? $data["itemOrServiceList"] : [];
-        $this->type = isset($data["type"]) ? $data["type"] : "İskonto";
-        $this->base = isset($data["base"]) ? $data["base"] : "";
-        $this->itemOrServiceTotalPrice = isset($data["itemOrServiceTotalPrice"]) ? $data["itemOrServiceTotalPrice"] : "";
-        $this->totalDiscount = isset($data["totalDiscount"]) ? $data["totalDiscount"] : "";
-        $this->calculatedVAT = isset($data["calculatedVAT"]) ? $data["calculatedVAT"] : "";
-        $this->taxTotalPrice = isset($data["taxTotalPrice"]) ? $data["taxTotalPrice"] : "";
-        $this->includedTaxesTotalPrice = isset($data["includedTaxesTotalPrice"]) ? $data["includedTaxesTotalPrice"] : "";
-        $this->paymentPrice = isset($data["paymentPrice"]) ? $data["paymentPrice"] : "";
-        $this->note = isset($data["note"]) ? $data["note"] : "";
-        $this->orderNumber = isset($data["orderNumber"]) ? $data["orderNumber"] : "";
-        $this->orderData = isset($data["orderData"]) ? $data["orderData"] : "";
-        $this->waybillNumber = isset($data["waybillNumber"]) ? $data["waybillNumber"] : "";
-        $this->waybillDate = isset($data["waybillDate"]) ? $data["waybillDate"] : "";
-        $this->receiptNumber = isset($data["receiptNumber"]) ? $data["receiptNumber"] : "";
-        $this->voucherDate = isset($data["voucherDate"]) ? $data["voucherDate"] : "";
-        $this->voucherTime = isset($data["voucherTime"]) ? $data["voucherTime"] : "";
-        $this->voucherType = isset($data["voucherType"]) ? $data["voucherType"] : "";
-        $this->zReportNumber = isset($data["zReportNumber"]) ? $data["zReportNumber"] : "";
-        $this->okcSerialNumber = isset($data["okcSerialNumber"]) ? $data["okcSerialNumber"] : "";
+        $this->uuid = $data["uuid"] ?? Uuid::uuid1()->toString();
+        $this->documentNumber = $data["documentNumber"] ?? "";
+        $this->date = $data["date"] ?? "";
+        $this->time = $data["time"] ?? "";
+        $this->currency = $data["currency"] ?? "";
+        $this->currencyRate = $data["currencyRate"] ?? "";
+        $this->invoiceType = $data["invoiceType"] ?? "";
+        $this->whichType = $data["whichType"] ?? "5000/30000";
+        $this->taxOrIdentityNumber = $data["taxOrIdentityNumber"] ?? "11111111111";
+        $this->invoiceAcceptorTitle = $data["invoiceAcceptorTitle"] ?? "";
+        $this->invoiceAcceptorName = $data["invoiceAcceptorName"] ?? "";
+        $this->invoiceAcceptorLastName = $data["invoiceAcceptorLastName"] ?? "";
+        $this->buildingName = $data["buildingName"] ?? "";
+        $this->buildingNumber = $data["buildingNumber"] ?? "";
+        $this->doorNumber = $data["doorNumber"] ?? "";
+        $this->town = $data["town"] ?? "";
+        $this->taxAdministration = $data["taxAdministration"] ?? "";
+        $this->country = $data["country"] ?? "";
+        $this->avenueStreet = $data["avenueStreet"] ?? "";
+        $this->district = $data["district"] ?? "";
+        $this->city = $data["city"] ?? "";
+        $this->postNumber = $data["postNumber"] ?? "";
+        $this->telephoneNumber = $data["telephoneNumber"] ?? "";
+        $this->faxNumber = $data["faxNumber"] ?? "";
+        $this->email = $data["email"] ?? "";
+        $this->website = $data["website"] ?? "";
+        $this->refundTable = $data["refundTable"] ?? [];
+        $this->specialBaseAmount = $data["specialBaseAmount"] ?? "0";
+        $this->specialBasePercent = $data["specialBasePercent"] ?? "0";
+        $this->specialBaseTaxAmount = $data["specialBaseTaxAmount"] ?? "0";
+        $this->taxType = $data["taxType"] ?? "";
+        $this->itemOrServiceList = $data["itemOrServiceList"] ?? [];
+        $this->type = $data["type"] ?? "İskonto";
+        $this->base = $data["base"] ?? "";
+        $this->itemOrServiceTotalPrice = $data["itemOrServiceTotalPrice"] ?? "";
+        $this->totalDiscount = $data["totalDiscount"] ?? "";
+        $this->calculatedVAT = $data["calculatedVAT"] ?? "";
+        $this->taxTotalPrice = $data["taxTotalPrice"] ?? "";
+        $this->includedTaxesTotalPrice = $data["includedTaxesTotalPrice"] ?? "";
+        $this->paymentPrice = $data["paymentPrice"] ?? "";
+        $this->note = $data["note"] ?? "";
+        $this->orderNumber = $data["orderNumber"] ?? "";
+        $this->orderData = $data["orderData"] ?? "";
+        $this->waybillNumber = $data["waybillNumber"] ?? "";
+        $this->waybillDate = $data["waybillDate"] ?? "";
+        $this->receiptNumber = $data["receiptNumber"] ?? "";
+        $this->voucherDate = $data["voucherDate"] ?? "";
+        $this->voucherTime = $data["voucherTime"] ?? "";
+        $this->voucherType = $data["voucherType"] ?? "";
+        $this->zReportNumber = $data["zReportNumber"] ?? "";
+        $this->okcSerialNumber = $data["okcSerialNumber"] ?? "";
 
         $this->insertChecks($data);
     }
@@ -188,18 +238,19 @@ class Invoice
      * Data insert checks
      *
      * @param array $data
+     *
      * @return void
      */
-    private function insertChecks($data)
+    private function insertChecks(array $data)
     {
         if (isset($data["uuid"])) {
-            if (!Uuid::isValid($data["uuid"])) {
+            if (! Uuid::isValid($data["uuid"])) {
                 throw new ValidatorException("UUID Hatalı");
             }
         }
 
         if (isset($data["faturaUuid"])) {
-            if (!Uuid::isValid($data["faturaUuid"])) {
+            if (! Uuid::isValid($data["faturaUuid"])) {
                 throw new ValidatorException("UUID Hatalı");
             }
         }
@@ -220,7 +271,7 @@ class Invoice
             "paraBirimi" => $this->currency,
             "dovzTLkur" => $this->currencyRate,
             "faturaTipi" => $this->invoiceType,
-            "hangiTip" =>  $this->whichType,
+            "hangiTip" => $this->whichType,
             "vknTckn" => $this->taxOrIdentityNumber,
             "aliciUnvan" => $this->invoiceAcceptorTitle,
             "aliciAdi" => $this->invoiceAcceptorName,
@@ -280,14 +331,14 @@ class Invoice
             "aliciUnvanAdSoyad" => $this->invoiceAcceptorTitle,
             "belgeTarihi" => $this->date,
             "belgeTuru" => "FATURA",
-            "ettn" => $this->uuid
+            "ettn" => $this->uuid,
         ];
     }
 
 
     /**
      * Get the value of uuid
-     * 
+     *
      * @return string
      */
     public function getUuid()
@@ -302,7 +353,7 @@ class Invoice
      */
     public function setUuid($uuid)
     {
-        if (!Uuid::isValid($uuid)) {
+        if (! Uuid::isValid($uuid)) {
             throw new ValidatorException("UUID Hatalı");
         }
 
@@ -313,7 +364,7 @@ class Invoice
 
     /**
      * Get the value of documentNumber
-     * 
+     *
      * @return string
      */
     public function getDocumentNumber()
@@ -335,7 +386,7 @@ class Invoice
 
     /**
      * Get the value of date
-     * 
+     *
      * @return string
      */
     public function getDate()
@@ -357,7 +408,7 @@ class Invoice
 
     /**
      * Get the value of time
-     * 
+     *
      * @return string
      */
     public function getTime()
@@ -379,7 +430,7 @@ class Invoice
 
     /**
      * Get the value of currency
-     * 
+     *
      * @return string
      */
     public function getCurrency()
@@ -401,7 +452,7 @@ class Invoice
 
     /**
      * Get the value of currencyRate
-     * 
+     *
      * @return string
      */
     public function getCurrencyRate()
@@ -423,7 +474,7 @@ class Invoice
 
     /**
      * Get the value of invoiceType
-     * 
+     *
      * @return string
      */
     public function getInvoiceType()
@@ -445,7 +496,7 @@ class Invoice
 
     /**
      * Get the value of whichType
-     * 
+     *
      * @return string
      */
     public function getWhichType()
@@ -467,18 +518,18 @@ class Invoice
 
     /**
      * Get the value of taxOrIdentityNumber
-     * 
+     *
      * @return string
      */
     public function getTaxOrIdentityNumber()
     {
-        return $this->taxOrIdentityNumber ? $this->taxOrIdentityNumber : "11111111111";
+        return $this->taxOrIdentityNumber ?: "11111111111";
     }
 
     /**
      * Set the value of taxOrIdentityNumber
      *
-     * @return  self
+     * @return self
      */
     public function setTaxOrIdentityNumber($taxOrIdentityNumber)
     {
@@ -489,7 +540,7 @@ class Invoice
 
     /**
      * Get the value of invoiceAcceptorTitle
-     * 
+     *
      * @return string
      */
     public function getInvoiceAcceptorTitle()
@@ -511,7 +562,7 @@ class Invoice
 
     /**
      * Get the value of invoiceAcceptorName
-     * 
+     *
      * @return string
      */
     public function getInvoiceAcceptorName()
@@ -533,7 +584,7 @@ class Invoice
 
     /**
      * Get the value of invoiceAcceptorLastName
-     * 
+     *
      * @return string
      */
     public function getInvoiceAcceptorLastName()
@@ -555,7 +606,7 @@ class Invoice
 
     /**
      * Get the value of buildingName
-     * 
+     *
      * @return string
      */
     public function getBuildingName()
@@ -577,7 +628,7 @@ class Invoice
 
     /**
      * Get the value of buildingNumber
-     * 
+     *
      * @return string
      */
     public function getBuildingNumber()
@@ -599,7 +650,7 @@ class Invoice
 
     /**
      * Get the value of doorNumber
-     * 
+     *
      * @return string
      */
     public function getDoorNumber()
@@ -621,7 +672,7 @@ class Invoice
 
     /**
      * Get the value of town
-     * 
+     *
      * @return string
      */
     public function getTown()
@@ -643,7 +694,7 @@ class Invoice
 
     /**
      * Get the value of taxAdministration
-     * 
+     *
      * @return string
      */
     public function getTaxAdministration()
@@ -665,7 +716,7 @@ class Invoice
 
     /**
      * Get the value of country
-     * 
+     *
      * @return string
      */
     public function getCountry()
@@ -687,7 +738,7 @@ class Invoice
 
     /**
      * Get the value of avenueStreet
-     * 
+     *
      * @return string
      */
     public function getAvenueStreet()
@@ -709,7 +760,7 @@ class Invoice
 
     /**
      * Get the value of district
-     * 
+     *
      * @return string
      */
     public function getDistrict()
@@ -731,7 +782,7 @@ class Invoice
 
     /**
      * Get the value of city
-     * 
+     *
      * @return string
      */
     public function getCity()
@@ -753,7 +804,7 @@ class Invoice
 
     /**
      * Get the value of postNumber
-     * 
+     *
      * @return string
      */
     public function getPostNumber()
@@ -775,7 +826,7 @@ class Invoice
 
     /**
      * Get the value of telephoneNumber
-     * 
+     *
      * @return string
      */
     public function getTelephoneNumber()
@@ -797,7 +848,7 @@ class Invoice
 
     /**
      * Get the value of faxNumber
-     * 
+     *
      * @return string
      */
     public function getFaxNumber()
@@ -819,7 +870,7 @@ class Invoice
 
     /**
      * Get the value of email
-     * 
+     *
      * @return string
      */
     public function getEmail()
@@ -841,7 +892,7 @@ class Invoice
 
     /**
      * Get the value of website
-     * 
+     *
      * @return string
      */
     public function getWebsite()
@@ -863,7 +914,7 @@ class Invoice
 
     /**
      * Get the value of refundTable
-     * 
+     *
      * @return string
      */
     public function getRefundTable()
@@ -885,7 +936,7 @@ class Invoice
 
     /**
      * Get the value of specialBaseAmount
-     * 
+     *
      * @return string
      */
     public function getSpecialBaseAmount()
@@ -907,7 +958,7 @@ class Invoice
 
     /**
      * Get the value of specialBasePercent
-     * 
+     *
      * @return string
      */
     public function getSpecialBasePercent()
@@ -929,7 +980,7 @@ class Invoice
 
     /**
      * Get the value of specialBaseTaxAmount
-     * 
+     *
      * @return string
      */
     public function getSpecialBaseTaxAmount()
@@ -951,7 +1002,7 @@ class Invoice
 
     /**
      * Get the value of taxType
-     * 
+     *
      * @return string
      */
     public function getTaxType()
@@ -973,7 +1024,7 @@ class Invoice
 
     /**
      * Get the value of itemOrServiceList
-     * 
+     *
      * @return string
      */
     public function getItemOrServiceList()
@@ -995,7 +1046,7 @@ class Invoice
 
     /**
      * Get the value of type
-     * 
+     *
      * @return string
      */
     public function getType()
@@ -1017,7 +1068,7 @@ class Invoice
 
     /**
      * Get the value of base
-     * 
+     *
      * @return string
      */
     public function getBase()
@@ -1039,7 +1090,7 @@ class Invoice
 
     /**
      * Get the value of itemOrServiceTotalPrice
-     * 
+     *
      * @return string
      */
     public function getItemOrServiceTotalPrice()
@@ -1061,7 +1112,7 @@ class Invoice
 
     /**
      * Get the value of totalDiscount
-     * 
+     *
      * @return string
      */
     public function getTotalDiscount()
@@ -1083,7 +1134,7 @@ class Invoice
 
     /**
      * Get the value of calculatedVAT
-     * 
+     *
      * @return string
      */
     public function getCalculatedVAT()
@@ -1105,7 +1156,7 @@ class Invoice
 
     /**
      * Get the value of taxTotalPrice
-     * 
+     *
      * @return string
      */
     public function getTaxTotalPrice()
@@ -1127,7 +1178,7 @@ class Invoice
 
     /**
      * Get the value of includedTaxesTotalPrice
-     * 
+     *
      * @return string
      */
     public function getIncludedTaxesTotalPrice()
@@ -1149,7 +1200,7 @@ class Invoice
 
     /**
      * Get the value of paymentPrice
-     * 
+     *
      * @return string
      */
     public function getPaymentPrice()
@@ -1171,7 +1222,7 @@ class Invoice
 
     /**
      * Get the value of note
-     * 
+     *
      * @return string
      */
     public function getNote()
@@ -1193,7 +1244,7 @@ class Invoice
 
     /**
      * Get the value of orderNumber
-     * 
+     *
      * @return string
      */
     public function getOrderNumber()
@@ -1215,7 +1266,7 @@ class Invoice
 
     /**
      * Get the value of orderData
-     * 
+     *
      * @return string
      */
     public function getOrderData()
@@ -1237,7 +1288,7 @@ class Invoice
 
     /**
      * Get the value of waybillNumber
-     * 
+     *
      * @return string
      */
     public function getWaybillNumber()
@@ -1259,7 +1310,7 @@ class Invoice
 
     /**
      * Get the value of waybillDate
-     * 
+     *
      * @return string
      */
     public function getWaybillDate()
@@ -1281,7 +1332,7 @@ class Invoice
 
     /**
      * Get the value of receiptNumber
-     * 
+     *
      * @return string
      */
     public function getReceiptNumber()
@@ -1303,7 +1354,7 @@ class Invoice
 
     /**
      * Get the value of voucherDate
-     * 
+     *
      * @return string
      */
     public function getVoucherDate()
@@ -1325,7 +1376,7 @@ class Invoice
 
     /**
      * Get the value of voucherTime
-     * 
+     *
      * @return string
      */
     public function getVoucherTime()
@@ -1347,7 +1398,7 @@ class Invoice
 
     /**
      * Get the value of voucherType
-     * 
+     *
      * @return string
      */
     public function getVoucherType()
@@ -1369,7 +1420,7 @@ class Invoice
 
     /**
      * Get the value of zReportNumber
-     * 
+     *
      * @return string
      */
     public function getZReportNumber()
@@ -1391,7 +1442,7 @@ class Invoice
 
     /**
      * Get the value of okcSerialNumber
-     * 
+     *
      * @return string
      */
     public function getOkcSerialNumber()
@@ -1415,14 +1466,15 @@ class Invoice
      * Currency transformer
      *
      * @param string $value
+     *
      * @return string
      */
-    public function currencyTransformerToWords($value)
+    public function currencyTransformerToWords(string $value)
     {
         $value = (string) str_replace(".", "", $value);
         $number_to_words = new NumberToWords();
         $currency_transformer = $number_to_words->getCurrencyTransformer("tr");
-        $words = mb_strtoupper($currency_transformer->toWords($value, "TRY"), 'utf-8');
-        return $words;
+
+        return mb_strtoupper($currency_transformer->toWords($value, "TRY"), 'utf-8');
     }
 }
